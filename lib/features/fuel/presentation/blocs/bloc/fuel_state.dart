@@ -1,26 +1,18 @@
 part of 'fuel_bloc.dart';
 
 @immutable
-sealed class FuelState {}
-
-final class FuelInitial extends FuelState {
+sealed class FuelState extends Equatable {
   @override
-  bool operator ==(Object other) {
-    return other is FuelInitial && runtimeType == other.runtimeType;
-  }
+  List<Object?> get props => [];
 }
+
+final class FuelInitial extends FuelState {}
 
 final class FuelSuccess extends FuelState {
   final List<FuelLog> logs;
 
   FuelSuccess(this.logs);
-
-  @override
-  bool operator ==(Object other) {
-    return other is FuelSuccess &&  super.runtimeType == other.runtimeType;
-  }
-
-  @override
-  int get hashCode => logs.hashCode;
   
+  @override
+  List<Object?> get props => [logs];
 }

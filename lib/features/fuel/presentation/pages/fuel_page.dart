@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/platform_adaptive_widget.dart';
 import '../../presentation/blocs/bloc/fuel_bloc.dart';
 import '../../domain/entities/fuel_log.dart';
+import '../widgets/fuel_trend_chart.dart';
 
 class FuelPage extends StatelessWidget {
   const FuelPage({super.key});
@@ -27,16 +28,23 @@ class FuelPage extends StatelessWidget {
     return BlocBuilder<FuelBloc, FuelState>(
       builder: (context, state) {
         if (state is FuelSuccess) {
-          return ListView.builder(
-            itemCount: state.logs.length,
-            itemBuilder: (context, index) {
-              final log = state.logs[index];
-              return ListTile(
-                title: Text('Fuel: ${log.fuelAdded} L'),
-                // subtitle: Text('Mileage: ${log.mileage} km'),
-                trailing: Text('${log.date.toLocal()}'),
-              );
-            },
+          return Column(
+            children: [
+              Expanded(child: FuelTrendChart(fuelLogs: state.logs)),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: state.logs.length,
+                  itemBuilder: (context, index) {
+                    final log = state.logs[index];
+                    return ListTile(
+                      title: Text('Fuel: ${log.fuelAdded} L'),
+                      // subtitle: Text('Mileage: ${log.mileage} km'),
+                      trailing: Text('${log.date.toLocal()}'),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         }
         return const Center(child: Text('No logs yet'));
@@ -49,19 +57,28 @@ class FuelPage extends StatelessWidget {
     return BlocBuilder<FuelBloc, FuelState>(
       builder: (context, state) {
         if (state is FuelSuccess) {
-          return DataTable(
-            columns: const [
-              DataColumn(label: Text('Date')),
-              DataColumn(label: Text('Fuel Added (L)')),
-              // DataColumn(label: Text('Mileage (km)')),
+          return Column(
+            children: [
+              Expanded(child: FuelTrendChart(fuelLogs: state.logs)),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('Date')),
+                      DataColumn(label: Text('Fuel Added (L)')),
+                      // DataColumn(label: Text('Mileage (km)')),
+                    ],
+                    rows: state.logs.map((log) {
+                      return DataRow(cells: [
+                        DataCell(Text('${log.date.toLocal()}')),
+                        DataCell(Text('${log.fuelAdded}')),
+                        // DataCell(Text('${log.mileage}')),
+                      ]);
+                    }).toList(),
+                  ),
+                ),
+              )
             ],
-            rows: state.logs.map((log) {
-              return DataRow(cells: [
-                DataCell(Text('${log.date.toLocal()}')),
-                DataCell(Text('${log.fuelAdded}')),
-                // DataCell(Text('${log.mileage}')),
-              ]);
-            }).toList(),
           );
         }
         return const Center(child: Text('No logs yet'));
