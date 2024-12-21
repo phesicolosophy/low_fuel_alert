@@ -15,15 +15,9 @@ void main() {
   });
 
   test('initial state should be FuelInitial', () {
-    // TODO FixMe: when running
-    // expect(fuelBloc.state, equals(FuelInitial()));
-    // Expected: <Instance of 'FuelInitial'>
-    // Actual: <Instance of 'FuelInitial'>
-    //package:matcher
-    expect(fuelBloc.state is FuelInitial, true);
+    expect(fuelBloc.state, equals(FuelInitial()));
   });
 
-// TODO FixMe: TimeOut
   test('should emit FuelSuccess when logs are added', () {
     final FuelLog fuelLog = FuelLog(
       date: DateTime(2024, 12, 20),
@@ -36,5 +30,7 @@ void main() {
         FuelSuccess([fuelLog])
       ]),
     );
+
+    fuelBloc.add(AddFuel(fuelLog));
   });
 }
