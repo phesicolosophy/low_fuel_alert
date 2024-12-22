@@ -9,7 +9,7 @@ import 'package:low_fuel_alert/features/fuel/presentation/pages/fuel_page.dart';
 void main() {
   testWidgets('FuelPage should display "No logs yet" when no logs exist',
       (WidgetTester tester) async {
-    final FuelLog mockFuelLog = FuelLog(date: DateTime(2024, 12, 18), fuelAdded: 10.0);
+    final FuelLog mockFuelLog = FuelLog(date: DateTime(2024, 12, 18), amount: 100.0);
     final mockFuelBloc = FuelBloc(AddFuelLog())..add(AddFuel(mockFuelLog));
 
     await tester.pumpWidget(MaterialApp(
@@ -23,7 +23,7 @@ void main() {
   });
 
   testWidgets('FuelPage should display list of log data is available', (WidgetTester tester) async {
-    final FuelLog mockFuelLog = FuelLog(date: DateTime(2024, 12, 18), fuelAdded: 10.0);
+    final FuelLog mockFuelLog = FuelLog(date: DateTime(2024, 12, 18), amount: 100.0);
     final FuelBloc mockFuelBloc = FuelBloc(AddFuelLog())..emit(FuelSuccess([mockFuelLog]));
 
     await tester.pumpWidget(MaterialApp(
@@ -33,6 +33,6 @@ void main() {
       ),
     ));
 
-    expect(find.text('10'), findsOneWidget);
+    expect(find.text('100'), findsOneWidget);
   });
 }

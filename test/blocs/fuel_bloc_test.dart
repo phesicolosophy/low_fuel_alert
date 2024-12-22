@@ -21,7 +21,7 @@ void main() {
   test('should emit FuelSuccess when logs are added', () {
     final FuelLog fuelLog = FuelLog(
       date: DateTime(2024, 12, 20),
-      fuelAdded: 15.0,
+      amount: 200.0,
     );
 
     expectLater(

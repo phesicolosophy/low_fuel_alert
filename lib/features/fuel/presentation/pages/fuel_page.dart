@@ -36,10 +36,17 @@ class FuelPage extends StatelessWidget {
                   itemCount: state.logs.length,
                   itemBuilder: (context, index) {
                     final log = state.logs[index];
+                    final DateTime date = log.date.toLocal();
                     return ListTile(
-                      title: Text('Fuel: ${log.fuelAdded} L'),
-                      // subtitle: Text('Mileage: ${log.mileage} km'),
-                      trailing: Text('${log.date.toLocal()}'),
+                      title: Text('Cost: ${log.amount} Dz'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Fuel Added: ${log.fuelAdded.toStringAsFixed(2)} L'),
+                          Text('Estimated Distance: ${log.fuelAdded.toStringAsFixed(2)} m'),
+                        ],
+                      ),
+                      trailing: Text('${date.year}-${date.month}-${date.day}'),
                     );
                   },
                 ),
@@ -65,14 +72,17 @@ class FuelPage extends StatelessWidget {
                   child: DataTable(
                     columns: const [
                       DataColumn(label: Text('Date')),
-                      DataColumn(label: Text('Fuel Added (L)')),
-                      // DataColumn(label: Text('Mileage (km)')),
+                      DataColumn(label: Expanded(child: Text('Cost (Dz)'))),
+                      DataColumn(label: Expanded(child: Text('Fuel Added (L)'))),
+                      DataColumn(label: Expanded(child: Text('Estimated Distance (m)'))),
                     ],
                     rows: state.logs.map((log) {
+                      final DateTime date = log.date.toLocal();
                       return DataRow(cells: [
-                        DataCell(Text('${log.date.toLocal()}')),
-                        DataCell(Text('${log.fuelAdded}')),
-                        // DataCell(Text('${log.mileage}')),
+                        DataCell(Text('${date.year}-${date.month}-${date.day}')),
+                        DataCell(Text('${log.amount}')),
+                        DataCell(Text(log.fuelAdded.toStringAsFixed(2))),
+                        DataCell(Text(log.estimatedDistance.toStringAsFixed(2))),
                       ]);
                     }).toList(),
                   ),
@@ -90,7 +100,7 @@ class FuelPage extends StatelessWidget {
   void _addFuelLog(BuildContext context) {
     final log = FuelLog(
       date: DateTime.now(),
-      fuelAdded: 10.5,
+      amount: 500.0,
       // mileage: 150.0,
     );
     context.read<FuelBloc>().add(AddFuel(log));

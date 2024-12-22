@@ -42,40 +42,52 @@ class FuelTrendChart extends StatelessWidget {
     final sortedLogs = fuelLogs..sort((a, b) => a.date.compareTo(b.date));
 
     // Create the data points
+    final List<FlSpot> amountSpots = [];
     final List<FlSpot> fuelSpots = [];
     for (int i = 0; i < sortedLogs.length; i++) {
       final log = sortedLogs[i];
-      fuelSpots.add(FlSpot(i.toDouble(), log.fuelAdded));
+      amountSpots.add(FlSpot(i.toDouble(), log.amount));
+      fuelSpots.add(FlSpot(i.toDouble(), log.fuelAdded.ceilToDouble()));
     }
 
     return LineChartData(
       gridData: FlGridData(show: true),
       titlesData: FlTitlesData(
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: (value, meta) {
-              if (value.toInt() < sortedLogs.length) {
-                final date = sortedLogs[value.toInt()].date;
-                return Text('${date.month}/${date.day}');
-              }
-              return const Text('');
-            },
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 1,
+              getTitlesWidget: (value, meta) {
+                if (value.toInt() < sortedLogs.length) {
+                  final date = sortedLogs[value.toInt()].date;
+                  return Text('${date.month}/${date.day}');
+                }
+                return const Text('');
+              },
+            ),
           ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: true),
-        ),
-      ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
       borderData: FlBorderData(
         show: true,
         border: Border.all(color: Colors.grey, width: 1),
       ),
       lineBarsData: [
         LineChartBarData(
-          spots: fuelSpots,
+          spots: amountSpots,
           isCurved: true,
           color: Colors.blue,
+          barWidth: 3,
+          belowBarData: BarAreaData(show: false),
+          dotData: FlDotData(show: true),
+        ),
+        LineChartBarData(
+          spots: fuelSpots,
+          isCurved: true,
+          color: Colors.greenAccent,
           barWidth: 3,
           belowBarData: BarAreaData(show: false),
           dotData: FlDotData(show: true),
