@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/platform_adaptive_widget.dart';
@@ -98,11 +100,44 @@ class FuelPage extends StatelessWidget {
 
   /// Function to add a sample fuel log
   void _addFuelLog(BuildContext context) {
-    final log = FuelLog(
-      date: DateTime.now(),
-      amount: 500.0,
-      // mileage: 150.0,
+    TextEditingController textEditingController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add Fuel Log or Entry'),
+          icon: Icon(Icons.gas_meter_outlined),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Cost'),
+              TextField(
+                controller: textEditingController,
+                autofocus: true,
+                autocorrect: false,
+                maxLength: 4,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final double? amount = double.tryParse(textEditingController.text);
+                // Todo account for NaN
+                if (amount == null || amount == double.infinity) return;
+                final log = FuelLog(
+                  date: DateTime.now(),
+                  amount: amount,
+                );
+                context.read<FuelBloc>().add(AddFuel(log));
+                Navigator.pop(context);
+              },
+              child: Text('Add'),
+            )
+          ],
+        );
+      },
     );
-    context.read<FuelBloc>().add(AddFuel(log));
   }
 }
