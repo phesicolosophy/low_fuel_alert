@@ -1,3 +1,7 @@
+import 'package:hive/hive.dart';
+
+part 'fuel_log.g.dart';
+
 /// Represents a log entry for fuel tracking.
 /// Register the log history etch time you add fuel to tank.
 /// 
@@ -6,10 +10,13 @@
 /// [fuelAdded] is the amount of fuel (unit) get added.
 // Todo[DONE] replace fuelAdded by amount of money added, calculate the fuel added by saving a global variable
 // todo rate exchange from money to fuel; calculate the same wey to how match in kilometer that amount going to rest
+@HiveType(typeId: 0)
 class FuelLog {
   /// The date and time of the fuel log entry.
+  @HiveField(0)
   final DateTime date;
   /// The amount of money spent on fuel (in the user's selected currency).
+  @HiveField(1)
   final double amount;
 
   // TODO Move fuelCost and fuelEfficiency to Car or Tank model when get created

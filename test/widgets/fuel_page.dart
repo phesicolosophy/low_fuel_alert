@@ -10,7 +10,7 @@ void main() {
   testWidgets('FuelPage should display "No logs yet" when no logs exist',
       (WidgetTester tester) async {
     final FuelLog mockFuelLog = FuelLog(date: DateTime(2024, 12, 18), amount: 100.0);
-    final mockFuelBloc = FuelBloc(AddFuelLog())..add(AddFuel(mockFuelLog));
+    final mockFuelBloc = FuelBloc()..add(AddFuel(mockFuelLog));
 
     await tester.pumpWidget(MaterialApp(
       home: BlocProvider<FuelBloc>(
@@ -24,7 +24,7 @@ void main() {
 
   testWidgets('FuelPage should display list of log data is available', (WidgetTester tester) async {
     final FuelLog mockFuelLog = FuelLog(date: DateTime(2024, 12, 18), amount: 100.0);
-    final FuelBloc mockFuelBloc = FuelBloc(AddFuelLog())..emit(FuelSuccess([mockFuelLog]));
+    final FuelBloc mockFuelBloc = FuelBloc()..emit(FuelSuccess([mockFuelLog]));
 
     await tester.pumpWidget(MaterialApp(
       home: BlocProvider<FuelBloc>(

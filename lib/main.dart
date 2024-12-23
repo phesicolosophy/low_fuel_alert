@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
-import 'package:low_fuel_alert/features/fuel/domain/usecases/add_fuel_log.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:low_fuel_alert/features/fuel/domain/entities/fuel_log.dart';
 import 'package:low_fuel_alert/features/fuel/presentation/pages/fuel_page.dart';
 import 'core/constants/platform_constants.dart';
 import 'core/themes/app_theme.dart';
 import 'features/fuel/presentation/blocs/bloc/fuel_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize Hive
+  await Hive.initFlutter();
+
+  // Register the FuelLog adapter
+  // Todo handle exception
+  Hive.registerAdapter(FuelLogAdapter());
+
+  // Open the boc for fuel logs
+  await Hive.openBox<FuelLog>('fuel_logs');
+
   runApp(const LowFuelAlertApp());
 }
 
@@ -16,7 +29,7 @@ class LowFuelAlertApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => FuelBloc(AddFuelLog()),
+      create: (context) => FuelBloc(),
       child: MaterialApp(
         title: PlatformConstants.appName,
         theme: AppTheme.lightTheme,
