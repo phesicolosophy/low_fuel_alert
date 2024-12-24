@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:low_fuel_alert/features/fuel/domain/entities/fuel_log.dart';
+import 'package:low_fuel_alert/features/fuel/domain/entities/fuel.dart';
 import 'package:low_fuel_alert/features/fuel/presentation/pages/fuel_page.dart';
 import 'core/constants/platform_constants.dart';
 import 'core/themes/app_theme.dart';
@@ -15,10 +15,10 @@ void main() async {
 
   // Register the FuelLog adapter
   // Todo handle exception
-  Hive.registerAdapter(FuelLogAdapter());
+  Hive.registerAdapter(FuelAdapter());
 
   // Open the boc for fuel logs
-  await Hive.openBox<FuelLog>('fuel_logs');
+  await Hive.openBox<Fuel>('fuel_logs');
 
   runApp(const LowFuelAlertApp());
 }

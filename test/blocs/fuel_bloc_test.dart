@@ -2,12 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mockito/mockito.dart';
-import 'package:low_fuel_alert/features/fuel/domain/entities/fuel_log.dart';
-import 'package:low_fuel_alert/features/fuel/domain/usecases/add_fuel_log.dart';
+import 'package:low_fuel_alert/features/fuel/domain/entities/fuel.dart';
 import 'package:low_fuel_alert/features/fuel/presentation/blocs/bloc/fuel_bloc.dart';
 
 
-class MockHiveBox extends Mock implements Box<FuelLog>{}
+class MockHiveBox extends Mock implements Box<Fuel>{}
 
 void main() {
   late FuelBloc fuelBloc;
@@ -24,11 +23,11 @@ void main() {
   });
 
   test('initial state should be FuelInitial', () {
-    expect(fuelBloc.state, equals(FuelInitial(mockBox)));
+    expect(fuelBloc.state, equals(FuelInitialState(mockBox)));
   });
 
-  test('should emit FuelSuccess when logs are added', () {
-    final FuelLog fuelLog = FuelLog(
+  test('should emit FuelSuccess when fuel are added to logs', () {
+    final Fuel fuelLog = Fuel(
       date: DateTime(2024, 12, 20),
       amount: 200.0,
     );
@@ -36,16 +35,16 @@ void main() {
     expectLater(
       fuelBloc.stream,
       emitsInOrder([
-        FuelSuccess([fuelLog])
+        FuelSuccessState([fuelLog])
       ]),
     );
 
-    fuelBloc.add(AddFuel(fuelLog));
+    fuelBloc.add(AddFuelEvent(fuelLog));
   });
 
   group('Hive persistence', () {
     test('should add a fuel log and persist it', () {
-      final fuelLog = FuelLog(
+      final fuelLog = Fuel(
         date: DateTime.now(),
         amount: 300.0,
       );

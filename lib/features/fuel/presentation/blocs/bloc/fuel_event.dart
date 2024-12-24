@@ -3,8 +3,8 @@ part of 'fuel_bloc.dart';
 @immutable
 sealed class FuelEvent {}
 
-final class AddFuel extends FuelEvent {
-  final FuelLog log;
+final class AddFuelEvent extends FuelEvent {
+  final Fuel log;
 
-  AddFuel(this.log);
+  AddFuelEvent(this.log);
 }

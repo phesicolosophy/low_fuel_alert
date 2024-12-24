@@ -1,10 +1,9 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/platform_adaptive_widget.dart';
 import '../../presentation/blocs/bloc/fuel_bloc.dart';
-import '../../domain/entities/fuel_log.dart';
+import '../../domain/entities/fuel.dart';
 import '../widgets/fuel_trend_chart.dart';
 
 class FuelPage extends StatelessWidget {
@@ -29,7 +28,7 @@ class FuelPage extends StatelessWidget {
   Widget _buildMobileLayout(BuildContext context) {
     return BlocBuilder<FuelBloc, FuelState>(
       builder: (context, state) {
-        if (state is FuelSuccess) {
+        if (state is FuelSuccessState) {
           return Column(
             children: [
               Expanded(child: FuelTrendChart(fuelLogs: state.logs)),
@@ -56,7 +55,7 @@ class FuelPage extends StatelessWidget {
             ],
           );
         }
-        return const Center(child: Text('No logs yet'));
+        return const Center(child: Text('No fuel yet'));
       },
     );
   }
@@ -65,7 +64,7 @@ class FuelPage extends StatelessWidget {
   Widget _buildDesktopLayout(BuildContext context) {
     return BlocBuilder<FuelBloc, FuelState>(
       builder: (context, state) {
-        if (state is FuelSuccess) {
+        if (state is FuelSuccessState) {
           return Column(
             children: [
               Expanded(child: FuelTrendChart(fuelLogs: state.logs)),
@@ -92,9 +91,9 @@ class FuelPage extends StatelessWidget {
               )
             ],
           );
-        } else if (state is FuelInitial) {
+        } else if (state is FuelInitialState) {
           if (state.logsBox.isEmpty) {
-            return const Center(child: Text('No logs yet'));
+            return const Center(child: Text('No fuel yet'));
           } else {
             return Column(
               children: [
@@ -157,11 +156,11 @@ class FuelPage extends StatelessWidget {
                 final double? amount = double.tryParse(textEditingController.text);
                 // Todo account for NaN
                 if (amount == null || amount == double.infinity) return;
-                final log = FuelLog(
+                final log = Fuel(
                   date: DateTime.now(),
                   amount: amount,
                 );
-                context.read<FuelBloc>().add(AddFuel(log));
+                context.read<FuelBloc>().add(AddFuelEvent(log));
                 Navigator.pop(context);
               },
               child: Text('Add'),

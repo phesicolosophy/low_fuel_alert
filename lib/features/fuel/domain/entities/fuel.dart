@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'fuel_log.g.dart';
+part 'fuel.g.dart';
 
 /// Represents a log entry for fuel tracking.
 /// Register the log history etch time you add fuel to tank.
@@ -11,7 +11,7 @@ part 'fuel_log.g.dart';
 // Todo[DONE] replace fuelAdded by amount of money added, calculate the fuel added by saving a global variable
 // todo rate exchange from money to fuel; calculate the same wey to how match in kilometer that amount going to rest
 @HiveType(typeId: 0)
-class FuelLog {
+class Fuel {
   /// The date and time of the fuel log entry.
   @HiveField(0)
   final DateTime date;
@@ -28,7 +28,7 @@ class FuelLog {
   /// Default efficiency (meter per litre)
   double fuelEfficiency = 105.0;
 
-  FuelLog({
+  Fuel({
     required this.date,
     required this.amount,
   });
@@ -41,7 +41,7 @@ class FuelLog {
 
   @override
   String toString() {
-    return 'FuelLog(date: $date, amount: $amount, fuelCost: $fuelCost, '
+    return 'Fuel(date: $date, amount: $amount, fuelCost: $fuelCost, '
         'fuelAdded: $fuelAdded, estimatedDistance: $estimatedDistance)';
   }
 

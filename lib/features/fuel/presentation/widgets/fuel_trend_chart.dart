@@ -1,10 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import '../../domain/entities/fuel_log.dart';
+import '../../domain/entities/fuel.dart';
 
 /// Displays a line chart showing trends in fuel usage or mileage.
 class FuelTrendChart extends StatelessWidget {
-  final List<FuelLog> fuelLogs;
+  final List<Fuel> fuelLogs;
 
   const FuelTrendChart({required this.fuelLogs, super.key});
 
