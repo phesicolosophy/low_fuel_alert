@@ -1,12 +1,26 @@
 
-import '../entities/fuel.dart';
+import 'package:fpdart/src/either.dart';
+import 'package:hive/hive.dart' show Box;
 
-class AddFuel {
-  final List<Fuel> _fuelLogs = [];
+import '../../../../core/errors/failures.dart';
+import '../../../../core/usercase/usecase.dart' show Usecase;
+import '../entities/fuel.dart' show Fuel;
+import '../repositories/fuel_repository.dart';
 
-  void call(Fuel fuel) {
-    _fuelLogs.add(fuel);
+class AddFuel implements Usecase<Box<Fuel>, AddFuelParams> {
+  FuelRepository fuelRepository;
+  AddFuel(this.fuelRepository);
+
+
+  @override
+  Future<Either<Failure, Box<Fuel>>> call(AddFuelParams params) {
+    return fuelRepository.addFuel(params.fuelLog);
   }
+  
+}
 
-  List<Fuel> getAllLogs() => _fuelLogs;
+class AddFuelParams {
+  final Fuel fuelLog;
+
+  AddFuelParams({required this.fuelLog});
 }

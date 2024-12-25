@@ -1,20 +1,30 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
-import 'package:low_fuel_alert/features/fuel/domain/entities/fuel.dart';
-import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart' show Equatable;
+import 'package:meta/meta.dart' show immutable;
+
+import '../../../domain/entities/fuel.dart';
+import '../../../domain/usecases/add_fuel.dart';
 
 part 'fuel_event.dart';
 part 'fuel_state.dart';
 
-final Box<Fuel> _fuelBox = Hive.box<Fuel>('fuel_logs');
-
 class FuelBloc extends Bloc<FuelEvent, FuelState> {
+  final AddFuel _addFuel;
 
-  FuelBloc() : super(FuelInitialState(_fuelBox)) {
-    on<AddFuelEvent>((event, emit) {
-      _fuelBox.add(event.log);
-      emit.call(FuelSuccessState(_fuelBox.values.toList()));
-    });
+  FuelBloc({
+    required AddFuel addFuel,
+  })  : _addFuel = addFuel,
+        super(FuelInitialState()) {
+          on<FuelEvent>((event, emit) => emit(FuelLoadingState()));
+    on<AddFuelEvent>(_onAddFuelEvent);
+  }
+
+  void _onAddFuelEvent(AddFuelEvent event, Emitter<FuelState> emit) async {
+    final res = await _addFuel(AddFuelParams(fuelLog: event.log));
+
+    res.fold(
+      (l) => emit(FuelFailureState(l.message)),
+      (r) => emit(FuelSuccessState(r.values.toList())),
+    );
   }
 }

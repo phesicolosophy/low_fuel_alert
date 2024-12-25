@@ -39,10 +39,4 @@ class Fuel {
   /// Calculates the estimated distance covered using the added fuel.
   double get estimatedDistance => fuelAdded * fuelEfficiency;
 
-  @override
-  String toString() {
-    return 'Fuel(date: $date, amount: $amount, fuelCost: $fuelCost, '
-        'fuelAdded: $fuelAdded, estimatedDistance: $estimatedDistance)';
-  }
-
 }

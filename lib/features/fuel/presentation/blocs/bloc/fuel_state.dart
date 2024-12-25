@@ -6,14 +6,7 @@ sealed class FuelState extends Equatable {
   List<Object?> get props => [];
 }
 
-final class FuelInitialState extends FuelState {
-  final Box<Fuel> logsBox;
-
-  FuelInitialState(this.logsBox);
-
-  // @override
-  // List<Object?> get props => [logsBox];
-}
+final class FuelInitialState extends FuelState {}
 
 final class FuelSuccessState extends FuelState {
   final List<Fuel> logs;
@@ -22,4 +15,12 @@ final class FuelSuccessState extends FuelState {
   
   @override
   List<Object?> get props => [logs];
+}
+
+class FuelLoadingState extends FuelState {}
+
+final class FuelFailureState extends FuelState {
+  final String message;
+
+  FuelFailureState(this.message);
 }

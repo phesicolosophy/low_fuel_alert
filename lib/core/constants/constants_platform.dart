@@ -1,6 +1,7 @@
 import 'dart:io';
 
-class PlatformConstants {
+class ConstantsPlatform {
+  ConstantsPlatform._();
   static final bool isDesktop = Platform.isWindows || Platform.isLinux;
   static final bool isMobile = Platform.isAndroid;
 

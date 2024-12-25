@@ -64,6 +64,7 @@ class FuelPage extends StatelessWidget {
   Widget _buildDesktopLayout(BuildContext context) {
     return BlocBuilder<FuelBloc, FuelState>(
       builder: (context, state) {
+        if (state is FuelLoadingState) return Center(child: CircularProgressIndicator());
         if (state is FuelSuccessState) {
           return Column(
             children: [
@@ -91,39 +92,40 @@ class FuelPage extends StatelessWidget {
               )
             ],
           );
-        } else if (state is FuelInitialState) {
-          if (state.logsBox.isEmpty) {
-            return const Center(child: Text('No fuel yet'));
-          } else {
-            return Column(
-              children: [
-                Expanded(child: FuelTrendChart(fuelLogs: state.logsBox.values.toList())),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('Date')),
-                        DataColumn(label: Expanded(child: Text('Cost (Dz)'))),
-                        DataColumn(label: Expanded(child: Text('Fuel Added (L)'))),
-                        DataColumn(label: Expanded(child: Text('Estimated Distance (m)'))),
-                      ],
-                      rows: state.logsBox.values.toList().map((log) {
-                        final DateTime date = log.date.toLocal();
-                        return DataRow(cells: [
-                          DataCell(Text('${date.year}-${date.month}-${date.day}')),
-                          DataCell(Text('${log.amount}')),
-                          DataCell(Text(log.fuelAdded.toStringAsFixed(2))),
-                          DataCell(Text(log.estimatedDistance.toStringAsFixed(2))),
-                        ]);
-                      }).toList(),
-                    ),
-                  ),
-                )
-              ],
-            );
-          }
+        // } else if (state is FuelInitialState) {
+          // if (state.logsBox.isEmpty) {
+        //     return const Center(child: Text('No fuel yet'));
+        //   } else {
+        //     return Column(
+        //       children: [
+        //         Expanded(child: FuelTrendChart(fuelLogs: state.logsBox.values.toList())),
+        //         Expanded(
+        //           child: SingleChildScrollView(
+        //             child: DataTable(
+        //               columns: const [
+        //                 DataColumn(label: Text('Date')),
+        //                 DataColumn(label: Expanded(child: Text('Cost (Dz)'))),
+        //                 DataColumn(label: Expanded(child: Text('Fuel Added (L)'))),
+        //                 DataColumn(label: Expanded(child: Text('Estimated Distance (m)'))),
+        //               ],
+        //               rows: state.logsBox.values.toList().map((log) {
+        //                 final DateTime date = log.date.toLocal();
+        //                 return DataRow(cells: [
+        //                   DataCell(Text('${date.year}-${date.month}-${date.day}')),
+        //                   DataCell(Text('${log.amount}')),
+        //                   DataCell(Text(log.fuelAdded.toStringAsFixed(2))),
+        //                   DataCell(Text(log.estimatedDistance.toStringAsFixed(2))),
+        //                 ]);
+        //               }).toList(),
+        //             ),
+        //           ),
+        //         )
+        //       ],
+        //     );
+        //   }
         }
-        return const Center(child: Text('Error to get data'));
+        if (state is FuelFailureState) return Center(child: Text(state.message));
+        return Center(child: Text('No logs yet. Add your first log!'));
       },
     );
   }
