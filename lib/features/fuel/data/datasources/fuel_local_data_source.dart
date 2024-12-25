@@ -7,6 +7,7 @@ import '../../domain/entities/fuel.dart';
 
 abstract interface class FuelLocalDataSource {
   Box<Fuel> addFuel(Fuel fuelLog);
+  Box<Fuel> getAllFuels();
 }
 
 class FuelLocalDataSourceImp implements FuelLocalDataSource {
@@ -18,6 +19,14 @@ class FuelLocalDataSourceImp implements FuelLocalDataSource {
   Box<Fuel> addFuel(Fuel fuelLog) {
     if (fuelBox.isOpen) {
       fuelBox.add(fuelLog);
+      return fuelBox;
+    }
+    throw ExceptionLocalData(ConstantsErrors.databaseClose);
+  }
+  
+  @override
+  Box<Fuel> getAllFuels() {
+    if (fuelBox.isOpen) {
       return fuelBox;
     }
     throw ExceptionLocalData(ConstantsErrors.databaseClose);

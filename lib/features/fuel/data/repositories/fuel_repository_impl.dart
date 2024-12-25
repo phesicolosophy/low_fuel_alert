@@ -23,4 +23,16 @@ class FuelRepositoryImpl implements FuelRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Box<Fuel>>> getAllFuels() async {
+    try {
+      final Box<Fuel> fuelBox = fuelLocalDataSource.getAllFuels();
+      return right(fuelBox);
+    } on ExceptionLocalData catch (e) {
+      return left(Failure(e.message));
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

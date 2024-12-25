@@ -8,3 +8,5 @@ final class AddFuelEvent extends FuelEvent {
 
   AddFuelEvent(this.log);
 }
+
+class GetAllFuelsEvent extends FuelEvent {}

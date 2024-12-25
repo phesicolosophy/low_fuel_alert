@@ -7,4 +7,5 @@ import '../entities/fuel.dart' show Fuel;
 
 abstract interface class FuelRepository {
   Future<Either<Failure, Box<Fuel>>> addFuel(Fuel fuelLog);
+  Future<Either<Failure, Box<Fuel>>> getAllFuels();
 }
